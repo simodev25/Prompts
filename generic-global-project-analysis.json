@@ -1,0 +1,234 @@
+{
+  "project": {
+    "id": "generic-project-global-analysis-001",
+    "name": "Generic Software Project",
+    "summary": "Analyser globalement un projet logiciel en couvrant l’architecture technique, les workflows métier, la qualité de code, la sécurité, la robustesse opérationnelle, les flux de données, les dépendances internes et externes, l’expérience utilisateur, la testabilité, la maintenabilité, l’observabilité et la préparation à la production.",
+    "domain": "software-engineering",
+    "target_mode": "global-analysis",
+    "priority": "high",
+    "input_mode": "repository-and-docs"
+  },
+  "analysis_context": {
+    "discovery_mode": "auto-detect-from-repository-and-documentation",
+    "instructions": [
+      "Identifier automatiquement le périmètre fonctionnel du projet à partir du code, de la documentation et de la configuration",
+      "Détecter la stack technique réellement utilisée",
+      "Identifier les principales capacités fonctionnelles du système",
+      "Ne pas supposer un domaine métier, une architecture ou une stack spécifique sans preuve"
+    ]
+  },
+  "objective": {
+    "primary_goal": "Produire une évaluation globale, structurée et exploitable du projet sous les angles métier, technique, sécurité, exploitation, qualité logicielle et préparation à la production.",
+    "secondary_goals": [
+      "Identifier les forces et faiblesses majeures",
+      "Détecter les risques critiques et les incohérences d’architecture",
+      "Évaluer la maturité actuelle du projet et ses limites connues",
+      "Prioriser les remédiations",
+      "Proposer une roadmap d’amélioration réaliste"
+    ]
+  },
+  "analysis_axes": [
+    {
+      "id": "functional-fit",
+      "title": "Adéquation fonctionnelle",
+      "checks": [
+        "Le périmètre fonctionnel est-il clair, cohérent et réaliste ?",
+        "Les cas d’usage principaux sont-ils couverts de bout en bout ?",
+        "Les workflows métier clés sont-ils compréhensibles ?",
+        "Le système répond-il de manière crédible à son objectif principal ?"
+      ]
+    },
+    {
+      "id": "solution-architecture",
+      "title": "Architecture globale",
+      "checks": [
+        "L’architecture générale est-elle claire et lisible ?",
+        "Les dépendances entre composants sont-elles correctement découplées ?",
+        "Les responsabilités des modules et services sont-elles bien séparées ?",
+        "L’architecture actuelle est-elle compatible avec l’évolution future du système ?"
+      ]
+    },
+    {
+      "id": "data-and-flow-management",
+      "title": "Flux de données et orchestration",
+      "checks": [
+        "Les flux principaux du système sont-ils cohérents et traçables ?",
+        "Les échanges entre composants sont-ils bien définis ?",
+        "Les points de fallback ou de mode dégradé sont-ils suffisants ?",
+        "Les dépendances critiques sont-elles gérées correctement ?"
+      ]
+    },
+    {
+      "id": "integration-and-dependencies",
+      "title": "Dépendances internes et externes",
+      "checks": [
+        "Les intégrations avec les composants internes et externes sont-elles robustes ?",
+        "Les appels réseau, API, brokers, bases ou services tiers sont-ils bien encadrés ?",
+        "Les timeouts, retries, fallbacks et garde-fous sont-ils adaptés ?",
+        "Les dépendances critiques sont-elles identifiées et maîtrisées ?"
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Sécurité",
+      "checks": [
+        "Les endpoints, interfaces et opérations sensibles sont-ils correctement protégés ?",
+        "Les secrets, tokens, comptes techniques et configurations sensibles sont-ils gérés proprement ?",
+        "Les surfaces d’exposition sont-elles raisonnablement maîtrisées ?",
+        "Les mécanismes d’authentification, autorisation et traçabilité sont-ils suffisants ?"
+      ]
+    },
+    {
+      "id": "reliability-and-resilience",
+      "title": "Robustesse et résilience",
+      "checks": [
+        "Les modes dégradés sont-ils définis pour les dépendances critiques ?",
+        "Le système peut-il continuer à rendre un service utile en cas d’incident partiel ?",
+        "Les erreurs critiques sont-elles explicites et traçables ?",
+        "Les risques de blocage, d’incohérence d’état ou de perte de traitement sont-ils maîtrisés ?"
+      ]
+    },
+    {
+      "id": "performance-and-scalability",
+      "title": "Performance et scalabilité",
+      "checks": [
+        "Les points potentiels de contention ou de lenteur sont-ils identifiés ?",
+        "L’architecture est-elle compatible avec une montée en charge raisonnable ?",
+        "Les traitements critiques sont-ils adaptés au niveau de charge attendu ?",
+        "Les choix techniques risquent-ils de limiter la performance future ?"
+      ]
+    },
+    {
+      "id": "observability",
+      "title": "Observabilité et exploitation",
+      "checks": [
+        "Les métriques, logs et traces sont-ils suffisants ?",
+        "Les points de supervision sont-ils bien choisis ?",
+        "La structure facilite-t-elle l’exploitation et le diagnostic ?",
+        "Les diagnostics de troubleshooting sont-ils suffisamment matures ?"
+      ]
+    },
+    {
+      "id": "code-and-maintainability",
+      "title": "Qualité technique et maintenabilité",
+      "checks": [
+        "La structure du projet est-elle lisible et industrialisable ?",
+        "Les conventions sont-elles cohérentes entre modules ?",
+        "Le couplage entre logique métier, intégrations et persistance reste-t-il raisonnable ?",
+        "La dette technique visible est-elle acceptable ?"
+      ]
+    },
+    {
+      "id": "testing",
+      "title": "Testabilité et validation",
+      "checks": [
+        "Le socle de tests couvre-t-il les zones critiques ?",
+        "Les tests unitaires, d’intégration et de non-régression semblent-ils suffisants ?",
+        "Les workflows principaux sont-ils validés de manière crédible ?",
+        "Les scénarios d’échec sont-ils suffisamment testés ?"
+      ]
+    },
+    {
+      "id": "ux-ui-and-operability",
+      "title": "UX/UI et opérabilité",
+      "checks": [
+        "Les interfaces clés sont-elles alignées avec les besoins réels des utilisateurs ou opérateurs ?",
+        "La lisibilité des statuts, erreurs, résultats et actions est-elle suffisante ?",
+        "Les usages critiques sont-ils simples à exécuter et à comprendre ?",
+        "L’expérience globale soutient-elle efficacement les usages visés ?"
+      ]
+    },
+    {
+      "id": "production-readiness",
+      "title": "Préparation à la production",
+      "checks": [
+        "Le projet est-il prêt pour un déploiement dans un environnement réel ?",
+        "Quels écarts bloquent un usage plus large ou plus critique ?",
+        "Quels prérequis infra, sécurité, exploitation ou gouvernance manquent encore ?",
+        "Quelle trajectoire d’évolution semble naturelle à court et moyen terme ?"
+      ]
+    }
+  ],
+  "expected_output": {
+    "format": "structured-markdown",
+    "sections": [
+      "Résumé exécutif",
+      "Compréhension du projet",
+      "Forces majeures",
+      "Faiblesses majeures",
+      "Analyse détaillée par axe",
+      "Risques critiques",
+      "Risques élevés",
+      "Dette technique visible",
+      "Quick wins",
+      "Recommandations priorisées",
+      "Roadmap 30/60/90 jours",
+      "Verdict global"
+    ],
+    "scoring": {
+      "enabled": true,
+      "scale": 5,
+      "dimensions": [
+        "Architecture",
+        "Sécurité",
+        "Robustesse",
+        "Performance",
+        "Maintenabilité",
+        "Observabilité",
+        "Testabilité",
+        "UX opératoire",
+        "Préparation à la production"
+      ]
+    }
+  },
+  "execution_rules": {
+    "must_analyze_globally": true,
+    "must_identify_strengths": true,
+    "must_identify_weaknesses": true,
+    "must_prioritize_risks": true,
+    "must_propose_remediation_plan": true,
+    "must_distinguish_current_limit_from_true_defect": true,
+    "must_separate_blocking_issues_from_improvement_ideas": true,
+    "must_flag_security_critical_findings_explicitly": true,
+    "must_not_assume_safety_or_readiness_by_default": true,
+    "must_be_honest_about_uncertainties": true,
+    "must_detect_context_automatically": true
+  },
+  "review_lens": {
+    "architecture_lens": "solution-architect",
+    "security_lens": "application-security-review",
+    "ops_lens": "sre-devops",
+    "product_lens": "product-and-delivery-review",
+    "code_lens": "senior-engineering-review"
+  },
+  "output_contract": {
+    "final_verdict": {
+      "required": true,
+      "values": [
+        "coherent-and-promising",
+        "usable-with-constraints",
+        "promising-but-fragile",
+        "needs-structural-improvements",
+        "not-ready-for-production"
+      ]
+    },
+    "risk_register": {
+      "required": true,
+      "fields": [
+        "id",
+        "title",
+        "severity",
+        "impact",
+        "likelihood",
+        "evidence",
+        "recommendation",
+        "priority"
+      ]
+    },
+    "roadmap": {
+      "required": true,
+      "horizons": ["30d", "60d", "90d"]
+    }
+  },
+  "prompt": "Analyse globalement ce projet comme un architecte solution senior, un reviewer sécurité applicative et un lead engineer. Détecte automatiquement le périmètre fonctionnel, la stack technique et les capacités principales du système à partir du code et de la documentation. Évalue la cohérence du périmètre, l’architecture générale, les flux de données, les dépendances, la sécurité, la robustesse, la performance, la qualité technique, la testabilité, l’observabilité, l’expérience utilisateur et la préparation à la production. Distingue clairement les limites acceptables de l’état actuel des défauts bloquants. Donne un diagnostic structuré, un scoring par dimension, un registre de risques priorisé, puis une roadmap de remédiation 30/60/90 jours. Sois concret, critique, honnête et exploitable."
+}
