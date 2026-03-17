@@ -1,0 +1,385 @@
+{
+  "project": {
+    "id": "forex-multiagent-platform-ai-prompt-architecture-and-trading-expert-review-001",
+    "name": "Forex Multi-Agent Trading Platform",
+    "summary": "Analyser globalement le projet sous l’angle de l’architecture IA, de l’ingénierie de prompts, de la qualité du raisonnement multi-agent, de la pertinence trading des décisions produites, de la robustesse des workflows de décision, de l’usage des LLM, de la gestion du contexte, de la mémoire, de l’orchestration des agents, ainsi que de la cohérence entre signaux, débat, décision, gestion du risque et exécution.",
+    "domain": "ai-trading-platform",
+    "target_mode": "ai-prompt-architecture-and-trading-expert-analysis",
+    "priority": "high",
+    "input_mode": "repository-prompts-workflows-and-documentation"
+  },
+  "objective": {
+    "primary_goal": "Lire le code, les prompts, les règles métier et la documentation du projet afin d’évaluer la qualité de l’architecture IA et de la logique trading, puis identifier les améliorations possibles sur la construction des prompts, la spécialisation des agents, la circulation du contexte, la mémoire, la qualité décisionnelle, la réduction des hallucinations, la robustesse du débat multi-agent et la cohérence du pipeline de décision trading.",
+    "secondary_goals": [
+      "Évaluer la qualité réelle des prompts système et des prompts applicatifs",
+      "Détecter les redondances, contradictions ou ambiguïtés dans les rôles agents",
+      "Évaluer si les agents ont une spécialisation suffisamment nette",
+      "Déterminer si le contexte fourni aux LLM est utile, excessif ou mal structuré",
+      "Identifier les améliorations sur la mémoire court terme et long terme",
+      "Vérifier la cohérence entre analyse marché, décision trader, risk management et exécution",
+      "Définir les tests nécessaires pour valider la qualité des sorties IA",
+      "Produire un rapport final structuré avec recommandations priorisées"
+    ]
+  },
+  "roles_to_review": [
+    {
+      "name": "AI Prompt Architect",
+      "review_points": [
+        "clarté des instructions",
+        "hiérarchie des consignes",
+        "gestion des contraintes",
+        "format de sortie",
+        "réduction de l’ambiguïté",
+        "résistance aux hallucinations",
+        "décomposition du raisonnement",
+        "compatibilité avec plusieurs modèles"
+      ]
+    },
+    {
+      "name": "Trading Expert",
+      "review_points": [
+        "cohérence des signaux",
+        "pertinence des décisions BUY/SELL/HOLD",
+        "gestion du risque",
+        "logique de validation de trade",
+        "prise en compte du contexte marché",
+        "gestion des conflits entre signaux",
+        "qualité du timing d’entrée",
+        "robustesse de la logique d’exécution"
+      ]
+    },
+    {
+      "name": "Technical Analyst Agent",
+      "review_points": [
+        "qualité de lecture des indicateurs",
+        "cohérence multi-timeframe",
+        "détection de tendance",
+        "gestion de la volatilité",
+        "signal confidence",
+        "structure de sortie"
+      ]
+    },
+    {
+      "name": "News Analyst Agent",
+      "review_points": [
+        "qualité d’interprétation des news",
+        "distinction signal faible / fort",
+        "impact macro potentiel",
+        "fraîcheur de l’information",
+        "gestion de l’incertitude",
+        "risque de surinterprétation"
+      ]
+    },
+    {
+      "name": "Macro Analyst Agent",
+      "review_points": [
+        "lecture du contexte macro",
+        "intégration des taux et politiques monétaires",
+        "prise en compte des corrélations devises",
+        "priorisation des facteurs macro",
+        "capacité à contextualiser le marché"
+      ]
+    },
+    {
+      "name": "Sentiment Analyst Agent",
+      "review_points": [
+        "qualité du signal de sentiment",
+        "stabilité des conclusions",
+        "risque de bruit",
+        "pondération du sentiment dans la décision finale"
+      ]
+    },
+    {
+      "name": "Bullish Researcher",
+      "review_points": [
+        "solidité des arguments haussiers",
+        "usage de preuves",
+        "non-répétition avec autres agents",
+        "capacité à défendre un scénario crédible"
+      ]
+    },
+    {
+      "name": "Bearish Researcher",
+      "review_points": [
+        "solidité des arguments baissiers",
+        "usage de preuves",
+        "non-répétition avec autres agents",
+        "capacité à défendre un scénario crédible"
+      ]
+    },
+    {
+      "name": "Trader Agent",
+      "review_points": [
+        "capacité de synthèse",
+        "arbitrage entre signaux contradictoires",
+        "qualité de la décision finale",
+        "justification du trade",
+        "lisibilité du plan d’action"
+      ]
+    },
+    {
+      "name": "Risk Manager",
+      "review_points": [
+        "validation du niveau de risque",
+        "cohérence SL/TP",
+        "taille de position",
+        "gestion de l’exposition",
+        "filtrage des décisions trop fragiles"
+      ]
+    },
+    {
+      "name": "Execution Manager",
+      "review_points": [
+        "traduction fidèle de la décision en exécution",
+        "contrôle avant envoi d’ordre",
+        "gestion des erreurs",
+        "gestion des retries",
+        "sécurité de l’exécution",
+        "journalisation"
+      ]
+    }
+  ],
+  "mandatory_analysis_axes": [
+    {
+      "id": "prompt-architecture-review",
+      "title": "Analyse de l’architecture de prompts",
+      "checks": [
+        "Lire tous les prompts système, prompts de rôle et prompts applicatifs",
+        "Comparer la structure des prompts avec les bonnes pratiques de prompt engineering",
+        "Identifier les prompts trop vagues, trop longs, contradictoires ou redondants",
+        "Évaluer la qualité des contraintes imposées aux modèles",
+        "Évaluer la robustesse des formats de sortie demandés",
+        "Identifier les améliorations possibles sur la précision, la stabilité et la contrôlabilité"
+      ]
+    },
+    {
+      "id": "agent-specialization-review",
+      "title": "Analyse de la spécialisation des agents",
+      "checks": [
+        "Vérifier que chaque agent a un rôle distinct et utile",
+        "Identifier les chevauchements de responsabilités",
+        "Identifier les agents trop génériques ou trop faibles",
+        "Évaluer si certains agents devraient fusionner ou être scindés",
+        "Mesurer la valeur réelle de chaque agent dans la décision finale"
+      ]
+    },
+    {
+      "id": "context-and-memory-review",
+      "title": "Analyse du contexte et de la mémoire",
+      "checks": [
+        "Identifier quelles données sont injectées dans les prompts",
+        "Déterminer si le contexte est trop volumineux, insuffisant ou mal hiérarchisé",
+        "Évaluer l’usage de la mémoire court terme et long terme",
+        "Détecter les répétitions de contexte inutiles entre agents",
+        "Déterminer ce qui devrait être résumé, filtré, mis en cache ou persistant"
+      ]
+    },
+    {
+      "id": "reasoning-and-debate-review",
+      "title": "Analyse du raisonnement et du débat multi-agent",
+      "checks": [
+        "Évaluer la qualité du débat entre agents haussiers et baissiers",
+        "Déterminer si le désaccord est réellement utile ou purement cosmétique",
+        "Identifier les chaînes de raisonnement trop faibles ou trop répétitives",
+        "Détecter les conclusions non justifiées ou les raccourcis de raisonnement",
+        "Évaluer si le système produit une synthèse robuste ou un compromis artificiel"
+      ]
+    },
+    {
+      "id": "trading-logic-review",
+      "title": "Analyse de la logique trading",
+      "checks": [
+        "Évaluer la cohérence entre les signaux produits et la décision finale",
+        "Vérifier la logique BUY/SELL/HOLD",
+        "Vérifier si le trader agent filtre correctement les signaux faibles",
+        "Vérifier la cohérence du risk manager",
+        "Évaluer la pertinence des SL/TP, de l’exposition, du sizing et du timing",
+        "Détecter les décisions fragiles, opportunistes ou insuffisamment justifiées"
+      ]
+    },
+    {
+      "id": "llm-usage-review",
+      "title": "Analyse de l’usage des LLM",
+      "checks": [
+        "Identifier les appels LLM par agent et par workflow",
+        "Évaluer la nécessité réelle de chaque appel",
+        "Détecter les appels séquentiels inutiles",
+        "Évaluer les opportunités de mutualisation, résumé intermédiaire ou cache",
+        "Vérifier la qualité des entrées et sorties LLM",
+        "Identifier les risques de latence, coût, dérive ou non-déterminisme"
+      ]
+    },
+    {
+      "id": "output-quality-review",
+      "title": "Analyse de la qualité des sorties",
+      "checks": [
+        "Vérifier la cohérence des JSON ou structures de sortie",
+        "Vérifier la stabilité des réponses",
+        "Identifier les champs manquants, flous ou peu exploitables",
+        "Évaluer la qualité explicative des décisions",
+        "Déterminer si les sorties sont directement actionnables en production"
+      ]
+    },
+    {
+      "id": "integration-test-review",
+      "title": "Tests d’intégration IA et trading",
+      "checks": [
+        "Déterminer les flux critiques à couvrir en intégration",
+        "Vérifier si des tests existent déjà",
+        "Identifier les trous de couverture",
+        "Définir un plan de tests réaliste sur les chaînes multi-agent",
+        "Proposer des scénarios de validation bout en bout"
+      ]
+    },
+    {
+      "id": "evaluation-and-performance-review",
+      "title": "Évaluation qualité et performance",
+      "checks": [
+        "Définir les métriques de qualité des réponses IA",
+        "Définir les métriques de performance technique et métier",
+        "Proposer des scénarios de benchmark réalistes",
+        "Identifier les goulets d’étranglement sur le temps total d’un run",
+        "Proposer une baseline et des objectifs d’amélioration"
+      ]
+    }
+  ],
+  "required_architecture_decisions": {
+    "must_answer": [
+      "Les prompts actuels sont-ils assez précis pour obtenir des réponses robustes et stables ?",
+      "Les rôles agents sont-ils bien séparés ou trop redondants ?",
+      "Le contexte injecté aux agents est-il trop large, trop pauvre ou mal structuré ?",
+      "Faut-il introduire plus de mémoire, moins de mémoire, ou une mémoire mieux filtrée ?",
+      "Le débat multi-agent produit-il une vraie valeur ou ajoute-t-il surtout de la latence ?",
+      "La décision finale trading est-elle suffisamment fondée et exploitable ?",
+      "Quels agents doivent rester LLM-driven et quels traitements devraient devenir plus déterministes ?",
+      "Quels flux doivent être simplifiés, fusionnés ou réorganisés ?"
+    ]
+  },
+  "required_test_plan": {
+    "integration_tests": [
+      "run d’analyse multi-agent complet sur une paire Forex",
+      "chaîne technical analyst -> bullish/bearish researchers -> trader agent",
+      "pipeline trader agent -> risk manager -> execution manager",
+      "validation du format JSON de sortie de chaque agent",
+      "gestion des réponses LLM incomplètes ou invalides",
+      "fallback sur indisponibilité d’un service externe",
+      "workflow dashboard -> API -> orchestration -> résultat final",
+      "test d’un run avec mémoire activée puis désactivée",
+      "comparaison sortie mockée vs sortie réelle LLM",
+      "test de cohérence décisionnelle sur cas marché haussier, baissier et neutre"
+    ],
+    "performance_tests": [
+      "temps total d’un run multi-agent complet",
+      "latence par agent",
+      "impact du contexte long vs contexte réduit",
+      "impact de prompts plus longs vs prompts optimisés",
+      "impact des appels LLM parallélisés vs séquentiels",
+      "impact du cache sur les contextes et résumés intermédiaires",
+      "charge concurrente sur plusieurs runs simultanés",
+      "stabilité des temps de réponse sous charge",
+      "latence du pipeline de décision jusqu’à exécution",
+      "coût en tokens / volume de contexte / temps de réponse par workflow"
+    ]
+  },
+  "expected_report": {
+    "format": "structured-markdown",
+    "sections": [
+      "Résumé exécutif",
+      "Vue d’ensemble de l’architecture IA et trading",
+      "Agents et prompts analysés",
+      "Écarts entre implémentation actuelle et bonnes pratiques de prompt engineering",
+      "Analyse de la spécialisation des agents",
+      "Analyse du contexte et de la mémoire",
+      "Analyse du raisonnement multi-agent",
+      "Analyse de la qualité trading des décisions",
+      "Analyse de l’usage des LLM",
+      "Analyse de la qualité des sorties",
+      "Plan de tests d’intégration",
+      "Plan d’évaluation et de performance",
+      "Top bottlenecks",
+      "Quick wins",
+      "Recommandations prioritaires",
+      "Verdict final"
+    ]
+  },
+  "required_tables": [
+    {
+      "name": "agent_prompt_review",
+      "columns": [
+        "agent_or_prompt",
+        "current_usage",
+        "best_practice",
+        "gap",
+        "optimization_opportunity",
+        "priority"
+      ]
+    },
+    {
+      "name": "agent_role_clarity",
+      "columns": [
+        "agent",
+        "intended_role",
+        "actual_role",
+        "overlap_or_conflict",
+        "recommended_adjustment",
+        "priority"
+      ]
+    },
+    {
+      "name": "context_memory_review",
+      "columns": [
+        "flow",
+        "current_context",
+        "problem",
+        "recommended_context_strategy",
+        "expected_benefit"
+      ]
+    },
+    {
+      "name": "trading_decision_review",
+      "columns": [
+        "decision_flow",
+        "current_logic",
+        "risk_or_weakness",
+        "recommended_improvement",
+        "priority"
+      ]
+    },
+    {
+      "name": "integration_test_plan",
+      "columns": [
+        "test_name",
+        "scope",
+        "dependencies",
+        "expected_result",
+        "priority"
+      ]
+    },
+    {
+      "name": "performance_test_plan",
+      "columns": [
+        "scenario",
+        "target_component_or_flow",
+        "metric",
+        "load_profile",
+        "success_criteria",
+        "priority"
+      ]
+    }
+  ],
+  "execution_rules": {
+    "must_read_prompts": true,
+    "must_read_agent_logic": true,
+    "must_review_trading_reasoning": true,
+    "must_compare_prompts_with_best_practices": true,
+    "must_identify_role_overlaps": true,
+    "must_identify_context_and_memory_issues": true,
+    "must_identify_llm_overuse": true,
+    "must_propose_integration_tests": true,
+    "must_propose_performance_tests": true,
+    "must_generate_structured_report": true,
+    "must_prioritize_optimizations": true,
+    "must_be_honest_if_data_is_missing": true
+  },
+  "final_prompt": "Analyse ce projet sous l’angle d’un architecte IA spécialisé en prompt engineering et d’un expert trading Forex. Lis le code, les prompts, les rôles agents, les workflows d’orchestration et la documentation disponible. Évalue la qualité de l’architecture de prompts, la clarté des rôles, la circulation du contexte, l’usage de la mémoire, la qualité du raisonnement multi-agent, la cohérence des décisions trading, la robustesse du risk management et la fidélité de l’exécution. Compare l’implémentation actuelle avec les bonnes pratiques de prompt engineering, d’architecture agentique et de prise de décision trading. Identifie les redondances, ambiguïtés, conflits de rôles, faiblesses de raisonnement, risques d’hallucination, excès de contexte, appels LLM inutiles et défauts de logique métier. Définis ensuite un plan de tests d’intégration et un plan d’évaluation qualité/performance couvrant les flux critiques du système. Termine par un rapport structuré avec écarts, top bottlenecks, quick wins, recommandations priorisées et verdict final."
+}
