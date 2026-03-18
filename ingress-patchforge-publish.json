@@ -1,0 +1,316 @@
+{
+  "project": {
+    "id": "patch-ingress-nginx-061",
+    "name": "AtosPatch Forge - ingress-nginx Build, Patch & Publish",
+    "prompt_name": "atos-ingress-patchforge-publish",
+    "summary": "Analyser le dépôt ciblé, rechercher et comparer des correctifs upstream mineurs, sélectionner un candidat pertinent, implémenter un patch minimal dès qu’un candidat acceptable existe, exécuter les validations nécessaires, construire systématiquement les artefacts controller et helm-chart, taguer les livrables, pousser les images vers Docker Hub, puis produire un rapport final exploitable en français.",
+    "domain": "software-maintenance-and-patching",
+    "target_mode": "research-build-package-publish",
+    "priority": "high"
+  },
+  "run": {
+    "run_id": "maint-20260303-095526-ingress-nginx-061",
+    "correlation_id": "4038b6e2-a331-4ec8-949c-2e389cdb10061",
+    "mode": "auto",
+    "release_type": "patch-build-publish"
+  },
+  "repository": {
+    "repo_name": "ingress-nginx",
+    "repo_url": "https://github.com/kubernetes/ingress-nginx",
+    "base_branch": "main"
+  },
+  "agents": {
+    "orchestrator": true,
+    "maintenance-code": true,
+    "cybersecurity": true,
+    "qa-scenario": true,
+    "devops-runtime": true
+  },
+  "mission": {
+    "objectives": [
+      "Identifier et comparer des candidats de correctifs upstream mineurs",
+      "Prioriser les correctifs upstream de sécurité, puis fonctionnels, puis de maintenance",
+      "Sélectionner un candidat justifié, minimal et applicable",
+      "Analyser la pertinence sécurité et supply chain avec l’agent cybersecurity",
+      "Analyser les impacts code, build, images, chart et manifestes",
+      "Implémenter le patch dès qu’un candidat acceptable existe",
+      "Construire systématiquement les artefacts controller et helm-chart",
+      "Taguer systématiquement les artefacts produits avec suffixe atos",
+      "Pousser systématiquement les images produites vers Docker Hub",
+      "Valider le résultat techniquement et fonctionnellement",
+      "Produire un rapport final exploitable en français"
+    ],
+    "non_goals": [
+      "Refonte d’architecture",
+      "Migration majeure",
+      "Changement large hors périmètre",
+      "Patch spéculatif sans base upstream",
+      "Divergence durable par rapport à la branche cible",
+      "Création de PR",
+      "Push Git distant"
+    ]
+  },
+  "selection": {
+    "preferred_order": [
+      "minor-upstream-security-fix",
+      "minor-upstream-functional-fix",
+      "minor-upstream-maintenance-fix"
+    ],
+    "constraints": [
+      "Conserver un risque au plus moyen",
+      "Conserver un périmètre minimal",
+      "Privilégier strictement l’upstream",
+      "Éviter toute divergence large",
+      "Éviter tout changement spéculatif",
+      "Ne pas sélectionner de correctif majeur ou transversal"
+    ],
+    "candidate_rules": {
+      "min_candidates_to_review": 2,
+      "must_rank_candidates": true,
+      "must_explain_selection": true,
+      "must_compare_code_impact": true,
+      "must_compare_security_impact": true,
+      "must_compare_backport_feasibility": true
+    }
+  },
+  "implementation_policy": {
+    "patch_is_mandatory_if": [
+      "at_least_one_relevant_upstream_minor_candidate_found",
+      "candidate_risk_at_most_medium",
+      "candidate_scope_is_minimal",
+      "candidate_is_backportable_or_directly_applicable"
+    ],
+    "patch_rules": [
+      "patch_must_be_minimal",
+      "patch_must_follow_upstream_logic",
+      "patch_must_not_introduce_unrelated_changes",
+      "patch_must_not_expand_scope_without_explicit_justification",
+      "patch_must_prefer_code_fix_over_metadata_only_change"
+    ],
+    "fallback_if_multiple_candidates": [
+      "choose_lowest_risk_candidate",
+      "choose_smallest_diff_candidate",
+      "choose_candidate_with_strongest_upstream_justification"
+    ],
+    "build_and_publish_are_mandatory": true,
+    "build_even_if_no_patch": true,
+    "publish_even_if_no_patch": true,
+    "required_artifacts": [
+      "controller-image",
+      "helm-chart-package"
+    ]
+  },
+  "refusal_policy": {
+    "explicit_refusal_allowed": true,
+    "refusal_is_exceptional": true,
+    "allowed_only_if": [
+      "no_relevant_upstream_minor_fix_found_after_review",
+      "or_all_reviewed_candidates_exceed_medium_risk",
+      "or_all_reviewed_candidates_break_minimal_scope",
+      "or_all_reviewed_candidates_are_not_backportable_cleanly"
+    ],
+    "requirements_if_refused": [
+      "state_clear_reason_for_refusal",
+      "list_all_reviewed_candidates",
+      "explain_why_each_candidate_was_rejected",
+      "confirm_that_patch_mandatory_conditions_were_not_met",
+      "state_why_non_patch_outcome_is_safer_than_patching",
+      "still_build_and_tag_required_artifacts",
+      "still_publish_images_if_build_succeeds"
+    ],
+    "forbidden_refusal_reasons": [
+      "insufficient_effort",
+      "single_candidate_review_only",
+      "metadata_only_comparison_without_code_review",
+      "generic_uncertainty_without_evidence"
+    ]
+  },
+  "artifacts": {
+    "controller": {
+      "enabled": true,
+      "build_required": true,
+      "push_required": true,
+      "repository_strategy": "single-repository",
+      "image_repository": "docker.io/microfunctions/openclaw",
+      "image_component_name": "controller",
+      "dockerfile_strategy": "repository-native-preferred"
+    },
+    "helm_chart": {
+      "enabled": true,
+      "build_required": true,
+      "package_required": true,
+      "push_required": false,
+      "chart_name_strategy": "repository-native-preferred",
+      "versioning": {
+        "required": true,
+        "chart_version_pattern": "0.0.0-{run_id}-atos",
+        "app_version_pattern": "{image_tag_primary}"
+      }
+    },
+    "tagging": {
+      "git_tag_required": true,
+      "tag_suffix": "-atos",
+      "git_tag_pattern": "patch/{project_id}/{run_id}-{decision}-atos",
+      "annotation_template": "Run {run_id} - {project_id} - {decision} - atos"
+    },
+    "image_tags": {
+      "required": true,
+      "primary_tag_pattern": "{run_id}-{decision}-atos",
+      "additional_tags": [
+        "{decision}-atos",
+        "latest-atos"
+      ],
+      "decision_values": [
+        "patched",
+        "nopatch"
+      ]
+    }
+  },
+  "registry": {
+    "provider": "dockerhub",
+    "push_enabled": true,
+    "namespace": "microfunctions",
+    "repository": "openclaw",
+    "full_image_repository": "docker.io/microfunctions/openclaw",
+    "push_policy": {
+      "push_on_successful_build": true,
+      "push_even_if_no_patch": true,
+      "push_blocked_if_security_review_fails": true,
+      "push_blocked_if_build_fails": true
+    }
+  },
+  "build": {
+    "controller": {
+      "required": true,
+      "expected_outputs": [
+        "docker-image"
+      ],
+      "commands_guidance": [
+        "build controller image from repository-native Dockerfile when available",
+        "apply all required tags before push",
+        "record image digest after push when available"
+      ]
+    },
+    "helm_chart": {
+      "required": true,
+      "expected_outputs": [
+        "helm-lint",
+        "helm-template-render",
+        "helm-package"
+      ],
+      "commands_guidance": [
+        "lint the chart",
+        "render templates successfully",
+        "package the chart as tgz",
+        "record packaged chart filename"
+      ]
+    }
+  },
+  "validation": {
+    "required_checks": [
+      "targeted_code_review",
+      "security_review",
+      "build_check",
+      "runtime_review",
+      "qa_validation",
+      "image_build_validation",
+      "helm_chart_validation",
+      "publish_validation"
+    ],
+    "qa_rules": [
+      "add_or_run_targeted_tests_when_relevant",
+      "tests_must_cover_the_selected_patch_scope",
+      "do_not_add_unrelated_test_changes"
+    ],
+    "runtime_rules": [
+      "verify_no_obvious_runtime_regression",
+      "review_image_and_manifest_impact",
+      "justify_any_validation_limit_explicitly"
+    ],
+    "build_rules": [
+      "controller_image_must_build",
+      "helm_chart_must_lint",
+      "helm_chart_must_render",
+      "helm_chart_must_package",
+      "all_tags_must_be_applied_consistently"
+    ],
+    "publish_rules": [
+      "docker_push_must_be_attempted_for_controller_image",
+      "published_image_reference_must_be_reported",
+      "publish_failures_must_be_explicitly_reported"
+    ]
+  },
+  "acceptance": {
+    "required": [
+      "analysis_complete",
+      "security_review_complete",
+      "candidate_selection_complete",
+      "patch_implemented_or_explicitly_refused_with_full_justification",
+      "controller_build_complete",
+      "helm_chart_build_complete",
+      "image_tagging_complete",
+      "image_push_complete_if_build_succeeds",
+      "git_tag_created",
+      "build_and_runtime_review_complete",
+      "final_review_complete"
+    ],
+    "failure_conditions": [
+      "candidate_exists_but_no_patch_implemented_without_valid_refusal_basis",
+      "refusal_without_candidate_list",
+      "refusal_without_rejection_rationale",
+      "patch_with_scope_expansion_not_justified",
+      "patch_breaks_build",
+      "controller_build_missing",
+      "helm_chart_build_missing",
+      "required_tag_missing",
+      "required_push_not_attempted"
+    ]
+  },
+  "git": {
+    "tagging": {
+      "enabled": true,
+      "type": "annotated",
+      "scope": "local-only",
+      "push": false,
+      "create_even_if_no_patch": true,
+      "create_if_valid_refusal": true,
+      "pattern": "patch/{project_id}/{run_id}-{decision}-atos",
+      "annotation_template": "Run {run_id} - {project_id} - {decision} - atos"
+    }
+  },
+  "outputs": {
+    "deliverables": [
+      "analysis",
+      "candidate_review",
+      "patch",
+      "controller_image",
+      "helm_chart",
+      "qa_validation",
+      "runtime_validation",
+      "publish_validation",
+      "final_report"
+    ],
+    "report_format": "markdown",
+    "final_report_sections": [
+      "summary",
+      "branch_and_baseline",
+      "reviewed_upstream_candidates",
+      "candidate_comparison",
+      "selection_rationale",
+      "security_review",
+      "implemented_patch_or_refusal_basis",
+      "build_validation",
+      "helm_chart_validation",
+      "image_publication",
+      "git_tagging",
+      "runtime_validation",
+      "risk_assessment",
+      "final_decision"
+    ]
+  },
+  "language_policy": {
+    "output_language": "fr",
+    "allow_raw_technical_content": true,
+    "allow_standard_json_keys": true
+  }
+}
