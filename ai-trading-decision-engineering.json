@@ -1,0 +1,497 @@
+{
+  "project": {
+    "id": "forex-multiagent-platform-three-mode-decision-review-001",
+    "name": "Forex Multi-Agent Trading Platform",
+    "summary": "Analyser globalement la logique de décision du projet sous l’angle exclusif du moteur de scoring, du gating décisionnel et de la comparaison systématique des trois modes conservative, balanced et permissive, afin d’évaluer leur différenciation réelle, leur cohérence métier, leur robustesse opérationnelle et leur impact concret sur les décisions BUY/SELL/HOLD et l’autorisation d’exécution.",
+    "domain": "ai-trading-decision-engineering",
+    "target_mode": "three-mode-decision-analysis",
+    "priority": "high",
+    "input_mode": "repository-decision-code-configuration-workflows-and-sample-runs"
+  },
+  "objective": {
+    "primary_goal": "Lire la logique de décision, le code de scoring, les règles de gating, les profils conservative, balanced et permissive, les mécanismes de pénalité de contradiction, les conditions d’autorisation d’exécution, les fichiers de configuration, la documentation et les exemples de runs afin d’évaluer la qualité réelle du moteur de décision et, surtout, la différenciation effective entre les trois modes, puis identifier les améliorations prioritaires sur la robustesse du scoring, la stabilité des décisions BUY/SELL/HOLD, la cohérence des overrides, la calibrage des seuils, la prévention des faux positifs/faux négatifs et l’exploitabilité en production.",
+    "secondary_goals": [
+      "Évaluer la qualité réelle du calcul de net_score, debate_score, combined_score et confidence",
+      "Comparer systématiquement conservative, balanced et permissive sur les mêmes types de cas",
+      "Détecter les seuils trop permissifs, trop stricts ou incohérents selon le mode",
+      "Mesurer la cohérence entre technical_signal, signaux annexes, contradiction_level et final_decision dans chacun des trois modes",
+      "Identifier les collisions entre logique de scoring, minimum evidence, low_edge et overrides selon les modes",
+      "Évaluer si les modes conservative, balanced et permissive sont réellement différenciés en théorie et en pratique",
+      "Déterminer si certains cas sont bloqués à tort ou autorisés à tort selon le mode",
+      "Identifier les causes probables de faux positifs, faux négatifs, rigidité excessive ou permissivité excessive actuellement présentes",
+      "Définir un plan de tests comparatifs multi-modes réaliste",
+      "Produire un rapport final structuré avec constats prouvés, quick wins, bottlenecks, décisions d’architecture logique et recommandations priorisées"
+    ]
+  },
+  "review_order": [
+    "decision_engine_core",
+    "scoring_logic",
+    "gating_rules",
+    "mode_profiles_conservative_balanced_permissive",
+    "contradiction_handling",
+    "override_logic",
+    "execution_authorization_logic",
+    "risk_execution_interaction",
+    "tests_and_fixtures",
+    "documentation",
+    "sample_runs_if_available"
+  ],
+  "roles_to_review": [
+    {
+      "name": "Scoring Engine Layer",
+      "review_points": [
+        "clarté du calcul des scores",
+        "cohérence entre score brut et score final",
+        "stabilité des pondérations",
+        "lisibilité des règles de combinaison",
+        "niveau de contrôlabilité",
+        "sensibilité aux variations d’entrée"
+      ]
+    },
+    {
+      "name": "Decision Gating Layer",
+      "review_points": [
+        "clarté des règles BUY/SELL/HOLD",
+        "robustesse des conditions de blocage",
+        "gestion du low_edge",
+        "cohérence du minimum evidence",
+        "alignement avec les signaux réellement fournis",
+        "contrôlabilité des décisions finales"
+      ]
+    },
+    {
+      "name": "Three-Mode Comparison Layer",
+      "review_points": [
+        "différenciation réelle des trois modes",
+        "qualité comparative des seuils",
+        "cohérence conservative vs balanced vs permissive",
+        "progressivité entre les modes",
+        "lisibilité de la configuration",
+        "stabilité comparative inter-modes"
+      ]
+    },
+    {
+      "name": "Contradiction and Override Layer",
+      "review_points": [
+        "qualité de détection des contradictions",
+        "robustesse des pénalités",
+        "cohérence des overrides selon les trois modes",
+        "absence d’ouverture abusive",
+        "absence de blocage artificiel",
+        "traçabilité des justifications"
+      ]
+    },
+    {
+      "name": "Execution Decision Layer",
+      "review_points": [
+        "cohérence entre final_decision et execution_allowed",
+        "séparation décision vs exécution",
+        "gestion des cas marginaux",
+        "gestion du suggested_volume",
+        "interaction avec le risk-manager",
+        "stabilité des autorisations d’exécution"
+      ]
+    },
+    {
+      "name": "Observed Behavior Layer",
+      "review_points": [
+        "cohérence entre logique codée et runs observés",
+        "stabilité des sorties sur plusieurs pairs",
+        "valeur réelle des trois modes en pratique",
+        "détection de paliers trop grossiers",
+        "présence de faux positifs ou faux négatifs",
+        "qualité des traces de décision"
+      ]
+    }
+  ],
+  "mandatory_analysis_axes": [
+    {
+      "id": "score-structure-review",
+      "title": "Analyse de la structure du scoring",
+      "checks": [
+        "Lire le calcul exact de net_score, debate_score, combined_score et confidence",
+        "Identifier toutes les pondérations, pénalités et normalisations",
+        "Comparer cette structure avec les bonnes pratiques de moteurs de décision explicables",
+        "Identifier les scores trop discrets, trop quantifiés ou trop peu granulaires",
+        "Évaluer la séparation entre signal brut, ajustements, pénalités et confiance",
+        "Identifier les améliorations possibles sur précision, lisibilité et contrôlabilité"
+      ]
+    },
+    {
+      "id": "decision-hierarchy-review",
+      "title": "Analyse de la hiérarchie décisionnelle",
+      "checks": [
+        "Identifier les différentes couches de décision entre signal, score, gating et exécution",
+        "Vérifier l’absence de conflit entre règles de score et règles de gating",
+        "Détecter les priorités ambiguës entre technical_signal, combined_score, low_edge et contradictions",
+        "Identifier les règles implicites non formalisées",
+        "Évaluer si le moteur décide selon une hiérarchie claire ou selon des exceptions dispersées",
+        "Déterminer si certaines règles doivent être déplacées, fusionnées ou supprimées"
+      ]
+    },
+    {
+      "id": "three-mode-comparison-review",
+      "title": "Analyse comparative explicite des trois modes",
+      "checks": [
+        "Comparer conservative, balanced et permissive à partir du code, pas seulement des intentions",
+        "Vérifier que chaque mode définit réellement un comportement distinct",
+        "Mesurer la progressivité des seuils et des règles entre les trois modes",
+        "Identifier les points où balanced est inutilement trop proche de conservative ou permissive",
+        "Identifier les points où permissive reste trop bloquant ou au contraire devient trop ouvert",
+        "Déterminer si la gradation entre les trois modes est lisible, cohérente et exploitable en production"
+      ]
+    },
+    {
+      "id": "technical-signal-review",
+      "title": "Analyse du rôle du technical_signal",
+      "checks": [
+        "Identifier comment technical_signal influence la décision finale dans chaque mode",
+        "Déterminer si technical neutral bloque correctement les faux positifs dans les trois modes",
+        "Détecter les cas où technical bullish/bearish fort reste bloqué à tort selon le mode",
+        "Évaluer la cohérence entre technical_signal et combined_score",
+        "Identifier les cas où le signal technique est sur-dominant ou sous-utilisé",
+        "Mesurer la qualité des exceptions associées au technical neutral selon le mode"
+      ]
+    },
+    {
+      "id": "minimum-evidence-review",
+      "title": "Analyse du minimum evidence et du low_edge",
+      "checks": [
+        "Identifier comment minimum evidence est calculé dans chaque mode",
+        "Identifier comment low_edge est calculé dans chaque mode",
+        "Évaluer si low_edge reflète un vrai manque d’edge ou un artefact de logique",
+        "Détecter les cas où minimum evidence bloque artificiellement des setups valides",
+        "Déterminer si aligned_directional_source_count et independent_directional_source_count sont bien utilisés",
+        "Évaluer si la logique reste pertinente quand les sources indépendantes sont absentes, selon chacun des trois modes"
+      ]
+    },
+    {
+      "id": "contradiction-review",
+      "title": "Analyse des contradictions et des pénalités",
+      "checks": [
+        "Vérifier comment contradiction_level est calculé",
+        "Vérifier comment contradiction_penalty est appliqué dans chaque mode",
+        "Identifier les contradictions faibles, modérées et majeures",
+        "Détecter les cas où la pénalité est trop forte ou trop faible selon le mode",
+        "Évaluer la cohérence entre contradiction et volume_multiplier",
+        "Déterminer si les contradictions majeures sont correctement bloquantes dans les trois modes"
+      ]
+    },
+    {
+      "id": "override-review",
+      "title": "Analyse des overrides décisionnels",
+      "checks": [
+        "Identifier tous les overrides présents dans la logique",
+        "Détecter les overrides dangereux ou trop implicites",
+        "Évaluer les conditions d’activation des overrides conservative, balanced et permissive",
+        "Vérifier la traçabilité des overrides dans les runs",
+        "Déterminer si les overrides corrigent de vrais faux négatifs ou introduisent de nouveaux risques",
+        "Proposer des formulations logiques plus robustes"
+      ]
+    },
+    {
+      "id": "execution-boundary-review",
+      "title": "Analyse de la frontière décision vs exécution",
+      "checks": [
+        "Évaluer la cohérence entre final_decision, execution_allowed, should_execute et executed",
+        "Déterminer si l’exécution respecte strictement la décision dans chacun des trois modes",
+        "Détecter les cas où un trade marginal pourrait encore être exécuté",
+        "Identifier les endroits où une logique déterministe stricte est obligatoire",
+        "Évaluer la robustesse du suggested_volume et des volume multipliers",
+        "Déterminer si le workflow mérite d’être simplifié"
+      ]
+    },
+    {
+      "id": "sample-run-review",
+      "title": "Analyse comparative des runs observés",
+      "checks": [
+        "Comparer les runs conservative, balanced et permissive si disponibles",
+        "Identifier les cas forts, faibles, neutres et contradictoires",
+        "Mesurer si balanced et permissive débloquent réellement des setups valides par rapport à conservative",
+        "Détecter les faux positifs anciennement observés",
+        "Identifier les faux négatifs encore présents",
+        "Évaluer si les sorties sont stables, progressives et explicables entre les trois modes"
+      ]
+    },
+    {
+      "id": "testability-review",
+      "title": "Analyse de la testabilité de la logique",
+      "checks": [
+        "Vérifier si la logique de décision est testable isolément",
+        "Vérifier si des fixtures d’entrée/sortie existent",
+        "Identifier les trous de couverture",
+        "Déterminer les cas limites à tester",
+        "Proposer une stratégie de tests comparatifs multi-modes",
+        "Définir les scénarios nécessaires pour mesurer stabilité et conformité"
+      ]
+    },
+    {
+      "id": "performance-review",
+      "title": "Analyse performance et efficacité de la logique décisionnelle",
+      "checks": [
+        "Mesurer l’impact des couches successives de gating",
+        "Identifier les branches logiques coûteuses pour peu de valeur",
+        "Détecter les calculs redondants",
+        "Évaluer les gains possibles via simplification des règles",
+        "Proposer des pistes de réduction de complexité logique",
+        "Définir des objectifs réalistes d’optimisation"
+      ]
+    }
+  ],
+  "required_architecture_decisions": {
+    "must_answer": [
+      "La logique actuelle de scoring est-elle assez précise, stable et contrôlable ?",
+      "La hiérarchie entre technical_signal, combined_score, confidence, low_edge et contradiction est-elle claire ou conflictuelle ?",
+      "Conservative, balanced et permissive sont-ils réellement distincts en pratique ou seulement en configuration ?",
+      "Balanced joue-t-il un vrai rôle intermédiaire ou est-il trop proche de conservative ou permissive ?",
+      "Le low_edge et le minimum evidence bloquent-ils correctement les setups faibles ou sur-bloquent-ils le moteur selon le mode ?",
+      "Les overrides actuels corrigent-ils de vrais faux négatifs ou introduisent-ils de nouveaux risques selon le mode ?",
+      "La pénalité de contradiction est-elle calibrée correctement dans chacun des trois modes ?",
+      "Quels seuils doivent être simplifiés, recalibrés ou rendus plus granulaires ?",
+      "Quels composants devraient rester strictement déterministes et lesquels peuvent rester configurables ?",
+      "La logique d’exécution est-elle assez contrainte pour empêcher tout trade non justifié dans les trois modes ?",
+      "Quels sont les principaux risques de faux positifs, faux négatifs, rigidité excessive et permissivité excessive actuellement présents dans chacun des trois modes ?"
+    ]
+  },
+  "evidence_rules": {
+    "must_reference_observed_artifacts": true,
+    "artifact_examples": [
+      "decision engine code",
+      "scoring functions",
+      "mode configuration files",
+      "agent outputs",
+      "workflow orchestrators",
+      "tests",
+      "sample runs",
+      "JSON outputs",
+      "API contracts",
+      "settings files",
+      "documentation files"
+    ],
+    "must_distinguish": [
+      "observed_fact",
+      "inference",
+      "hypothesis_due_to_missing_data",
+      "recommendation"
+    ],
+    "must_not_claim_without_evidence": true,
+    "must_be_honest_if_data_is_missing": true,
+    "must_explicitly_mark_unverified_assumptions": true
+  },
+  "deterministic_boundary_rules": {
+    "must_identify_llm_driven_components": true,
+    "must_identify_components_that_should_be_deterministic": true,
+    "deterministic_candidates": [
+      "score aggregation",
+      "minimum evidence checks",
+      "technical neutral gate",
+      "contradiction penalties",
+      "required field checks",
+      "execution authorization",
+      "volume multiplier rules",
+      "config validation",
+      "fallback routing",
+      "run classification"
+    ]
+  },
+  "required_test_plan": {
+    "integration_tests": [
+      "validation d’un cas technical neutral avec score faible dans les trois modes",
+      "test d’un cas technical bearish fort sans contradiction majeure dans les trois modes",
+      "validation d’un cas contradiction major bloquant dans les trois modes",
+      "gestion d’un cas low_edge avec technical neutral dans les trois modes",
+      "test d’un override balanced sur signal technique intermédiaire",
+      "test d’un override permissive sur signal technique fort",
+      "test de cohérence entre final_decision et execution_allowed",
+      "workflow complet avec risk-manager et execution-manager",
+      "comparaison conservative vs balanced vs permissive sur le même input",
+      "test de stabilité d’un même input sur plusieurs runs identiques"
+    ],
+    "performance_tests": [
+      "temps total d’un run décisionnel complet par mode",
+      "coût logique par couche de gating",
+      "impact du nombre de règles sur la latence",
+      "impact des pénalités de contradiction sur la stabilité",
+      "impact des modes sur la fréquence des trades",
+      "impact d’une granularité de score plus fine",
+      "stabilité des temps de réponse sous charge",
+      "coût de calcul marginal d’un override supplémentaire",
+      "gain réel d’une simplification du moteur",
+      "écart de comportement entre les trois modes à volume d’inputs constant"
+    ]
+  },
+  "expected_report": {
+    "format": "structured-markdown",
+    "style": "evidence-driven-decision-oriented",
+    "sections": [
+      "Résumé exécutif",
+      "Périmètre réellement analysé",
+      "Vue d’ensemble de l’architecture décisionnelle",
+      "Fonctions et workflows analysés",
+      "Écarts entre implémentation actuelle et bonnes pratiques de moteurs de décision",
+      "Analyse de la hiérarchie des règles",
+      "Analyse du scoring",
+      "Analyse comparative de conservative, balanced et permissive",
+      "Analyse du low_edge, minimum evidence et overrides",
+      "Analyse des contradictions et pénalités",
+      "Analyse de la frontière décision / exécution",
+      "Analyse des runs observés",
+      "Analyse de la frontière LLM vs logique déterministe",
+      "Analyse de la qualité et de la stabilité des décisions",
+      "Plan de tests d’intégration",
+      "Plan d’évaluation et de performance",
+      "Top bottlenecks",
+      "Quick wins",
+      "Recommandations prioritaires",
+      "Décisions d’architecture logique recommandées",
+      "Verdict final"
+    ]
+  },
+  "required_tables": [
+    {
+      "name": "decision_logic_review",
+      "columns": [
+        "component_or_rule",
+        "current_usage",
+        "best_practice",
+        "gap",
+        "optimization_opportunity",
+        "priority"
+      ]
+    },
+    {
+      "name": "decision_hierarchy_review",
+      "columns": [
+        "rule_layer",
+        "current_role",
+        "problem_or_conflict",
+        "recommended_adjustment",
+        "expected_benefit",
+        "priority"
+      ]
+    },
+    {
+      "name": "three_mode_behavior_review",
+      "columns": [
+        "mode",
+        "intended_behavior",
+        "observed_behavior",
+        "gap_or_issue",
+        "recommended_adjustment",
+        "priority"
+      ]
+    },
+    {
+      "name": "cross_mode_case_review",
+      "columns": [
+        "case_type",
+        "conservative_expected",
+        "balanced_expected",
+        "permissive_expected",
+        "observed_gap",
+        "recommended_adjustment"
+      ]
+    },
+    {
+      "name": "low_edge_override_review",
+      "columns": [
+        "flow_or_case",
+        "current_low_edge_or_override_usage",
+        "problem",
+        "recommended_strategy",
+        "expected_benefit"
+      ]
+    },
+    {
+      "name": "execution_contract_review",
+      "columns": [
+        "flow_or_component",
+        "current_execution_contract",
+        "problem",
+        "recommended_contract_change",
+        "expected_benefit",
+        "priority"
+      ]
+    },
+    {
+      "name": "llm_vs_deterministic_review",
+      "columns": [
+        "component_or_flow",
+        "current_mode",
+        "problem",
+        "recommended_mode",
+        "reason",
+        "priority"
+      ]
+    },
+    {
+      "name": "failure_modes_review",
+      "columns": [
+        "component_or_rule",
+        "failure_mode",
+        "cause",
+        "impact",
+        "recommended_mitigation",
+        "priority"
+      ]
+    },
+    {
+      "name": "integration_test_plan",
+      "columns": [
+        "test_name",
+        "scope",
+        "dependencies",
+        "expected_result",
+        "priority"
+      ]
+    },
+    {
+      "name": "performance_test_plan",
+      "columns": [
+        "scenario",
+        "target_component_or_flow",
+        "metric",
+        "load_profile",
+        "success_criteria",
+        "priority"
+      ]
+    }
+  ],
+  "analysis_constraints": {
+    "must_read_decision_logic": true,
+    "must_read_scoring_logic": true,
+    "must_read_mode_configuration": true,
+    "must_read_agent_logic_relevant_to_decision_usage": true,
+    "must_compare_logic_with_best_practices": true,
+    "must_identify_rule_conflicts": true,
+    "must_identify_low_edge_and_override_issues": true,
+    "must_identify_mode_differentiation_issues": true,
+    "must_identify_deterministic_candidates": true,
+    "must_propose_integration_tests": true,
+    "must_propose_performance_tests": true,
+    "must_generate_structured_report": true,
+    "must_prioritize_optimizations": true,
+    "must_separate_observation_and_recommendation": true
+  },
+  "scoring_framework": {
+    "scale": "0_to_5",
+    "dimensions": [
+      "score_clarity",
+      "rule_hierarchy",
+      "conservative_quality",
+      "balanced_quality",
+      "permissive_quality",
+      "mode_differentiation",
+      "technical_signal_usage",
+      "low_edge_design",
+      "override_quality",
+      "contradiction_handling",
+      "decision_stability",
+      "execution_safety",
+      "testability",
+      "production_readiness",
+      "operational_controllability"
+    ]
+  },
+  "final_prompt": "Analyse ce projet sous l’angle exclusif d’un architecte senior spécialisé en moteurs de décision de trading, systèmes multi-agents et logique déterministe contrôlable. Lis en priorité la logique de scoring, les règles de gating BUY/SELL/HOLD, les profils conservative, balanced et permissive, les mécanismes de low_edge, minimum evidence, contradictions, overrides, autorisation d’exécution, gestion du volume, les tests existants, la documentation et les exemples de runs s’ils existent. Évalue la qualité de l’architecture décisionnelle, la clarté et la hiérarchie des règles, la différenciation réelle entre les trois modes, la cohérence entre technical_signal et décision finale, la robustesse des pénalités de contradiction, la qualité des overrides, la stabilité des décisions, la sécurité de l’exécution et la frontière entre logique LLM et logique strictement déterministe. Compare explicitement conservative, balanced et permissive sur les mêmes types de cas et détermine si la gradation entre eux est réellement utile, cohérente et exploitable. Identifie les redondances, ambiguïtés, conflits de règles, seuils mal calibrés, faux positifs potentiels, faux négatifs persistants, rigidités artificielles, paliers de score trop grossiers, logiques d’override dangereuses et faiblesses de traçabilité. Appuie chaque critique sur des artefacts réellement observés et distingue clairement faits, inférences, hypothèses et recommandations. Définis ensuite un plan de tests d’intégration décisionnelle, un plan d’évaluation qualité/stabilité et un plan de performance couvrant les flux critiques. Termine par un rapport structuré avec écarts, tables demandées, top bottlenecks, quick wins, décisions d’architecture logique, recommandations priorisées et verdict final."
+}
