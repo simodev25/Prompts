@@ -1,0 +1,478 @@
+{
+  "project": {
+    "id": "forex-multiagent-platform-prompt-engineering-review-001",
+    "name": "Forex Multi-Agent Trading Platform",
+    "summary": "Analyser globalement le projet sous l’angle exclusif de l’ingénierie de prompts, de la qualité des instructions système et applicatives, de la spécialisation des rôles LLM, de la circulation du contexte, de la mémoire, des formats de sortie, de la robustesse des interactions multi-agent et de la contrôlabilité des réponses produites.",
+    "domain": "ai-prompt-engineering",
+    "target_mode": "prompt-engineering-analysis",
+    "priority": "high",
+    "input_mode": "repository-prompts-workflows-documentation-and-sample-runs"
+  },
+  "objective": {
+    "primary_goal": "Lire les prompts, le code d’orchestration, les contrats d’entrée/sortie, les couches de contexte et de mémoire, les exemples de runs disponibles et la documentation afin d’évaluer la qualité de l’architecture de prompts du projet, puis identifier les améliorations prioritaires sur la clarté des instructions, la hiérarchie des consignes, la robustesse des formats de sortie, la spécialisation des agents, la gestion du contexte, la réduction des hallucinations, la stabilité des réponses et la compatibilité multi-modèles.",
+    "secondary_goals": [
+      "Évaluer la qualité réelle des prompts système, prompts de rôle et prompts applicatifs",
+      "Détecter les prompts trop vagues, trop longs, contradictoires, redondants ou insuffisamment contraints",
+      "Mesurer la netteté de spécialisation de chaque agent du point de vue prompt",
+      "Identifier les collisions entre consignes globales, instructions locales et logique applicative",
+      "Évaluer si le contexte injecté est utile, excessif, mal hiérarchisé ou mal ciblé",
+      "Évaluer l’usage de la mémoire court terme, long terme, du cache et des résumés intermédiaires",
+      "Déterminer les causes probables d’hallucination, de dérive, d’instabilité ou de JSON invalide",
+      "Définir un plan de tests de robustesse prompt et de performance LLM réaliste",
+      "Produire un rapport final structuré avec constats prouvés, quick wins, bottlenecks, décisions d’architecture prompt et recommandations priorisées"
+    ]
+  },
+  "review_order": [
+    "system_prompts",
+    "agent_role_prompts",
+    "application_prompts",
+    "agent_input_output_contracts",
+    "orchestration_workflows",
+    "context_memory_cache_layers",
+    "output_parsing_and_validation_layers",
+    "tests_and_fixtures",
+    "documentation",
+    "sample_runs_if_available"
+  ],
+  "roles_to_review": [
+    {
+      "name": "System Prompt Layer",
+      "review_points": [
+        "clarté des instructions globales",
+        "hiérarchie des consignes",
+        "stabilité des règles imposées",
+        "cohérence avec les prompts de rôle",
+        "niveau de contrainte",
+        "gestion des priorités d’instructions"
+      ]
+    },
+    {
+      "name": "Role Prompt Layer",
+      "review_points": [
+        "spécialisation réelle des rôles",
+        "non-chevauchement des responsabilités",
+        "précision des attentes",
+        "gestion des limites de rôle",
+        "alignement avec les inputs réellement fournis",
+        "contrôlabilité des sorties"
+      ]
+    },
+    {
+      "name": "Application Prompt Layer",
+      "review_points": [
+        "qualité des prompts dynamiques",
+        "bonne injection des variables",
+        "gestion des données manquantes",
+        "robustesse des instructions contextuelles",
+        "absence de bruit inutile",
+        "résistance aux variations d’entrée"
+      ]
+    },
+    {
+      "name": "Output Contract Design",
+      "review_points": [
+        "précision des formats demandés",
+        "robustesse des schémas JSON",
+        "contrainte sur les champs obligatoires",
+        "tolérance aux réponses partielles",
+        "facilité de parsing",
+        "cohérence entre prompt et post-traitement"
+      ]
+    },
+    {
+      "name": "Context and Memory Design",
+      "review_points": [
+        "pertinence du contexte injecté",
+        "hiérarchisation de l’information",
+        "gestion de la mémoire court terme",
+        "gestion de la mémoire long terme",
+        "usage du cache et des résumés",
+        "risque de pollution contextuelle"
+      ]
+    },
+    {
+      "name": "Multi-Agent Prompt Interaction",
+      "review_points": [
+        "qualité de la circulation du contexte entre agents",
+        "stabilité des interactions",
+        "risque de répétition",
+        "risque de contradiction artificielle",
+        "cohérence de la synthèse finale",
+        "valeur réelle du débat multi-agent"
+      ]
+    }
+  ],
+  "mandatory_analysis_axes": [
+    {
+      "id": "prompt-structure-review",
+      "title": "Analyse de la structure des prompts",
+      "checks": [
+        "Lire tous les prompts système, prompts de rôle et prompts applicatifs",
+        "Identifier la structure exacte de chaque prompt",
+        "Comparer cette structure avec les bonnes pratiques de prompt engineering",
+        "Identifier les prompts trop vagues, trop longs, trop verbeux ou mal décomposés",
+        "Évaluer la séparation entre rôle, objectif, contraintes, contexte et format de sortie",
+        "Identifier les améliorations possibles sur précision, lisibilité et contrôlabilité"
+      ]
+    },
+    {
+      "id": "instruction-hierarchy-review",
+      "title": "Analyse de la hiérarchie des instructions",
+      "checks": [
+        "Identifier les différentes couches d’instructions",
+        "Vérifier l’absence de conflit entre consignes globales et locales",
+        "Détecter les priorités ambiguës",
+        "Identifier les règles implicites non formalisées",
+        "Évaluer si les modèles peuvent facilement comprendre ce qui est prioritaire",
+        "Déterminer si certaines instructions doivent être déplacées, fusionnées ou supprimées"
+      ]
+    },
+    {
+      "id": "role-specialization-review",
+      "title": "Analyse de la spécialisation prompt des agents",
+      "checks": [
+        "Vérifier que chaque agent reçoit des instructions adaptées à un rôle distinct",
+        "Identifier les prompts de rôles trop proches",
+        "Détecter les agents sous-spécifiés ou sur-spécifiés",
+        "Mesurer la valeur réelle de chaque rôle du point de vue prompt",
+        "Évaluer si certains prompts devraient fusionner ou être séparés"
+      ]
+    },
+    {
+      "id": "context-injection-review",
+      "title": "Analyse de l’injection de contexte",
+      "checks": [
+        "Identifier quelles données sont injectées dans quels prompts",
+        "Déterminer si le contexte est trop large, trop pauvre ou mal ciblé",
+        "Détecter les répétitions inutiles de contexte",
+        "Évaluer si certaines données devraient être résumées avant injection",
+        "Identifier les informations décoratives ou non actionnables",
+        "Mesurer le coût contextuel par rapport à la valeur informationnelle réelle"
+      ]
+    },
+    {
+      "id": "memory-review",
+      "title": "Analyse de la mémoire et de la persistance contextuelle",
+      "checks": [
+        "Identifier où et comment la mémoire court terme est utilisée",
+        "Identifier où et comment la mémoire long terme est utilisée",
+        "Évaluer la qualité des données mémorisées",
+        "Détecter les risques de mémoire obsolète, bruitée ou polluante",
+        "Déterminer ce qui devrait être persistant, résumé, filtré, mis en cache ou supprimé",
+        "Évaluer si la mémoire améliore réellement la qualité des prompts"
+      ]
+    },
+    {
+      "id": "output-format-review",
+      "title": "Analyse des formats de sortie",
+      "checks": [
+        "Vérifier la précision des formats demandés dans les prompts",
+        "Vérifier la cohérence entre format demandé et parsing attendu",
+        "Identifier les ambiguïtés de structure",
+        "Détecter les champs flous ou non contraints",
+        "Évaluer la robustesse des consignes JSON",
+        "Déterminer si les sorties sont stables et faciles à exploiter"
+      ]
+    },
+    {
+      "id": "hallucination-control-review",
+      "title": "Analyse de la réduction des hallucinations",
+      "checks": [
+        "Identifier les zones où les prompts encouragent l’invention",
+        "Détecter l’absence de garde-fous face aux données manquantes",
+        "Vérifier si les prompts imposent correctement l’incertitude",
+        "Évaluer si les prompts demandent explicitement d’éviter les extrapolations non justifiées",
+        "Déterminer quels agents sont les plus exposés aux hallucinations",
+        "Proposer des formulations plus robustes"
+      ]
+    },
+    {
+      "id": "multi-agent-reasoning-review",
+      "title": "Analyse du raisonnement multi-agent côté prompts",
+      "checks": [
+        "Évaluer si les prompts favorisent une vraie complémentarité entre agents",
+        "Déterminer si le débat est réel ou artificiel",
+        "Détecter les instructions qui produisent des répétitions narratives",
+        "Identifier les prompts qui poussent à des conclusions superficielles",
+        "Évaluer la robustesse de la synthèse finale",
+        "Déterminer si le workflow multi-agent mérite d’être simplifié"
+      ]
+    },
+    {
+      "id": "llm-usage-review",
+      "title": "Analyse de l’usage des LLM du point de vue prompt",
+      "checks": [
+        "Identifier les appels LLM par agent et par étape",
+        "Évaluer la nécessité de chaque prompt",
+        "Détecter les prompts ou appels redondants",
+        "Identifier les opportunités de mutualisation, de résumé intermédiaire ou de cache",
+        "Évaluer l’impact de la longueur des prompts sur coût, latence et stabilité",
+        "Identifier les frontières où un traitement déterministe serait préférable à un prompt"
+      ]
+    },
+    {
+      "id": "prompt-testability-review",
+      "title": "Analyse de la testabilité des prompts",
+      "checks": [
+        "Vérifier si les prompts sont testables isolément",
+        "Vérifier si des fixtures d’entrée/sortie existent",
+        "Identifier les trous de couverture",
+        "Déterminer les cas limites à tester",
+        "Proposer une stratégie de tests de robustesse multi-modèles",
+        "Définir les scénarios nécessaires pour mesurer stabilité et conformité"
+      ]
+    },
+    {
+      "id": "performance-review",
+      "title": "Analyse performance et efficacité des prompts",
+      "checks": [
+        "Mesurer l’impact de la longueur des prompts",
+        "Identifier les prompts coûteux pour peu de valeur",
+        "Détecter les appels séquentiels inutiles",
+        "Évaluer les gains possibles via compression de contexte",
+        "Proposer des pistes de réduction de latence et de consommation tokens",
+        "Définir des objectifs réalistes d’optimisation"
+      ]
+    }
+  ],
+  "required_architecture_decisions": {
+    "must_answer": [
+      "Les prompts actuels sont-ils assez précis pour obtenir des réponses robustes, stables et contrôlables ?",
+      "La hiérarchie des instructions est-elle claire ou conflictuelle ?",
+      "Les rôles agents sont-ils bien séparés du point de vue prompt ou trop redondants ?",
+      "Le contexte injecté est-il trop large, trop pauvre ou mal structuré ?",
+      "La mémoire améliore-t-elle réellement la qualité des prompts ou ajoute-t-elle surtout du bruit ?",
+      "Le débat multi-agent est-il utile du point de vue prompt ou ajoute-t-il surtout de la latence et de la répétition ?",
+      "Quels prompts doivent être simplifiés, fusionnés, raccourcis ou réécrits ?",
+      "Quels appels LLM devraient être supprimés, regroupés ou remplacés par une logique déterministe ?",
+      "Les formats de sortie sont-ils assez contraints pour être exploités de manière fiable ?",
+      "Quels sont les principaux risques d’hallucination, de dérive et d’instabilité actuellement présents ?"
+    ]
+  },
+  "evidence_rules": {
+    "must_reference_observed_artifacts": true,
+    "artifact_examples": [
+      "system prompts",
+      "role prompts",
+      "application prompts",
+      "agent classes",
+      "workflow orchestrators",
+      "tests",
+      "sample runs",
+      "JSON schemas",
+      "API contracts",
+      "configuration files",
+      "documentation files"
+    ],
+    "must_distinguish": [
+      "observed_fact",
+      "inference",
+      "hypothesis_due_to_missing_data",
+      "recommendation"
+    ],
+    "must_not_claim_without_evidence": true,
+    "must_be_honest_if_data_is_missing": true,
+    "must_explicitly_mark_unverified_assumptions": true
+  },
+  "deterministic_boundary_rules": {
+    "must_identify_llm_driven_components": true,
+    "must_identify_components_that_should_be_deterministic": true,
+    "deterministic_candidates": [
+      "JSON schema validation",
+      "input sanitization",
+      "output parsing",
+      "required field checks",
+      "format normalization",
+      "retry policy",
+      "error classification",
+      "fallback routing",
+      "cache lookup",
+      "context filtering"
+    ]
+  },
+  "required_test_plan": {
+    "integration_tests": [
+      "validation d’un prompt système avec plusieurs prompts de rôle",
+      "test d’un agent avec contexte minimal puis contexte enrichi",
+      "validation du format JSON de sortie de chaque agent",
+      "gestion d’une réponse LLM incomplète ou invalide",
+      "test de cohérence entre prompt demandé et parsing applicatif",
+      "test de fallback en cas d’échec d’un appel LLM",
+      "workflow multi-agent complet avec synthèse finale",
+      "test avec mémoire activée puis désactivée",
+      "comparaison de sorties entre modèles différents sur les mêmes prompts",
+      "test de stabilité d’un même prompt sur plusieurs runs identiques"
+    ],
+    "performance_tests": [
+      "temps total d’un run multi-agent complet",
+      "latence par prompt",
+      "impact du contexte long vs contexte réduit",
+      "impact de prompts plus longs vs prompts optimisés",
+      "impact des appels LLM parallélisés vs séquentiels",
+      "impact du cache sur les résumés intermédiaires",
+      "stabilité des temps de réponse sous charge",
+      "coût en tokens par prompt et par workflow",
+      "coût marginal d’un agent supplémentaire",
+      "gain réel d’une compression de contexte"
+    ]
+  },
+  "expected_report": {
+    "format": "structured-markdown",
+    "style": "evidence-driven-decision-oriented",
+    "sections": [
+      "Résumé exécutif",
+      "Périmètre réellement analysé",
+      "Vue d’ensemble de l’architecture de prompts",
+      "Prompts et workflows analysés",
+      "Écarts entre implémentation actuelle et bonnes pratiques de prompt engineering",
+      "Analyse de la hiérarchie des instructions",
+      "Analyse de la spécialisation des rôles",
+      "Analyse du contexte, de la mémoire et du cache",
+      "Analyse des formats de sortie",
+      "Analyse de la réduction des hallucinations",
+      "Analyse du raisonnement multi-agent côté prompts",
+      "Analyse de la frontière LLM vs logique déterministe",
+      "Analyse de l’usage des LLM",
+      "Analyse de la qualité et de la stabilité des sorties",
+      "Plan de tests d’intégration",
+      "Plan d’évaluation et de performance",
+      "Top bottlenecks",
+      "Quick wins",
+      "Recommandations prioritaires",
+      "Décisions d’architecture prompt recommandées",
+      "Verdict final"
+    ]
+  },
+  "required_tables": [
+    {
+      "name": "prompt_review",
+      "columns": [
+        "prompt_or_layer",
+        "current_usage",
+        "best_practice",
+        "gap",
+        "optimization_opportunity",
+        "priority"
+      ]
+    },
+    {
+      "name": "instruction_hierarchy_review",
+      "columns": [
+        "instruction_layer",
+        "current_role",
+        "problem_or_conflict",
+        "recommended_adjustment",
+        "expected_benefit",
+        "priority"
+      ]
+    },
+    {
+      "name": "role_prompt_clarity",
+      "columns": [
+        "agent",
+        "intended_prompt_role",
+        "actual_prompt_role",
+        "overlap_or_ambiguity",
+        "recommended_adjustment",
+        "priority"
+      ]
+    },
+    {
+      "name": "context_memory_review",
+      "columns": [
+        "flow",
+        "current_context_or_memory_usage",
+        "problem",
+        "recommended_strategy",
+        "expected_benefit"
+      ]
+    },
+    {
+      "name": "output_contract_review",
+      "columns": [
+        "agent_or_flow",
+        "current_output_contract",
+        "problem",
+        "recommended_contract_change",
+        "expected_benefit",
+        "priority"
+      ]
+    },
+    {
+      "name": "llm_vs_deterministic_review",
+      "columns": [
+        "component_or_flow",
+        "current_mode",
+        "problem",
+        "recommended_mode",
+        "reason",
+        "priority"
+      ]
+    },
+    {
+      "name": "failure_modes_review",
+      "columns": [
+        "component_or_prompt",
+        "failure_mode",
+        "cause",
+        "impact",
+        "recommended_mitigation",
+        "priority"
+      ]
+    },
+    {
+      "name": "integration_test_plan",
+      "columns": [
+        "test_name",
+        "scope",
+        "dependencies",
+        "expected_result",
+        "priority"
+      ]
+    },
+    {
+      "name": "performance_test_plan",
+      "columns": [
+        "scenario",
+        "target_component_or_flow",
+        "metric",
+        "load_profile",
+        "success_criteria",
+        "priority"
+      ]
+    }
+  ],
+  "analysis_constraints": {
+    "must_read_prompts": true,
+    "must_read_prompt_assembly_logic": true,
+    "must_read_agent_logic_relevant_to_prompt_usage": true,
+    "must_compare_prompts_with_best_practices": true,
+    "must_identify_role_overlaps": true,
+    "must_identify_context_and_memory_issues": true,
+    "must_identify_llm_overuse": true,
+    "must_identify_deterministic_candidates": true,
+    "must_propose_integration_tests": true,
+    "must_propose_performance_tests": true,
+    "must_generate_structured_report": true,
+    "must_prioritize_optimizations": true,
+    "must_separate_observation_and_recommendation": true
+  },
+  "scoring_framework": {
+    "scale": "0_to_5",
+    "dimensions": [
+      "instruction_clarity",
+      "instruction_hierarchy",
+      "role_specialization",
+      "context_quality",
+      "memory_design",
+      "output_contract_quality",
+      "hallucination_resistance",
+      "response_stability",
+      "llm_efficiency",
+      "testability",
+      "multi_model_compatibility",
+      "production_readiness"
+    ]
+  },
+  "final_prompt": "Analyse ce projet sous l’angle exclusif d’un prompt engineer senior spécialisé en architecture LLM et workflows multi-agents. Lis en priorité les prompts système, les prompts de rôle, les prompts applicatifs, les contrats d’entrée/sortie des agents, les workflows d’orchestration, les couches de contexte, mémoire et cache, les mécanismes de parsing/validation, les tests existants, la documentation et les exemples de runs s’ils existent. Évalue la qualité de l’architecture de prompts, la clarté et la hiérarchie des instructions, la spécialisation des rôles, la qualité de l’injection de contexte, l’usage de la mémoire, la robustesse des formats de sortie, la réduction des hallucinations, la stabilité des réponses, la qualité des interactions multi-agent et la frontière entre appels LLM et logique déterministe. Compare l’implémentation actuelle avec les bonnes pratiques de prompt engineering. Identifie les redondances, ambiguïtés, conflits d’instructions, excès de contexte, défauts de structuration, appels LLM inutiles, risques de JSON invalide, risques de dérive et faiblesses de contrôlabilité. Appuie chaque critique sur des artefacts réellement observés et distingue clairement faits, inférences, hypothèses et recommandations. Définis ensuite un plan de tests d’intégration prompt, un plan d’évaluation qualité/stabilité et un plan de performance couvrant les flux critiques. Termine par un rapport structuré avec écarts, tables demandées, top bottlenecks, quick wins, décisions d’architecture prompt, recommandations priorisées et verdict final."
+}llm-prompt-architecture-review
